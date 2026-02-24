@@ -1,8 +1,20 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../utils/constants";
 
 const Premium = () => {
+    const [isUserPremium, setIsUserPremium] = useState(false)
+    useEffect(()=>{
+        verifyPremiumUser()
+    },[])
+    const verifyPremiumUser = async ()=>{
+        const response = await axios.get(BASE_URL + '/premium/verify',{
+            withCredentials: true
+        })
+        if(response.data.isPremium){
+            setIsUserPremium(true)
+        }
+    }
   const buyMembership = async (membershipType) => {
     try {
       const order = await axios.post(
@@ -32,6 +44,7 @@ const Premium = () => {
         theme: {
           color: "#3399cc",
         },
+        handler: verifyPremiumUser
       };
       const rzp = new window.Razorpay(options);
       rzp.open();
@@ -40,7 +53,7 @@ const Premium = () => {
     }
   };
 
-  return (
+  return  isUserPremium ? <h1> " You're already a premium user. " </h1> : 
     <div className="flex  flex-col lg:flex-row m-auto p-10">
       <div className="card bg-base-300 rounded-box grid h-80 grow place-items-center p-10">
         <h1 className="font-bold text-4xl"> Silver Membership</h1>
@@ -76,7 +89,8 @@ const Premium = () => {
         </button>
       </div>
     </div>
-  );
+  
+  ; 
 };
 
 export default Premium;
