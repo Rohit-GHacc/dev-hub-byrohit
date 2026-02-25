@@ -6,13 +6,13 @@ import UserCard from "./UserCard";
 import { addUser } from "../store/userSlice";
 const Profile = () => {
   const dispatch = useDispatch();
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
-  const [gender, setGender] = useState();
-  const [age, setAge] = useState();
-  const [photoURL, setPhotoURL] = useState();
-  const [about, setAbout] = useState();
-  const [skills, setSkills] = useState();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [gender, setGender] = useState("");
+  const [age, setAge] = useState("");
+  const [photoURL, setPhotoURL] = useState("");
+  const [about, setAbout] = useState("");
+  const [skills, setSkills] = useState([]);
   const [error, setError] = useState("");
   const [toast, setToast] = useState(false);
   // console.log('in profile' , user)

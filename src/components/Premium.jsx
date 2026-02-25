@@ -11,6 +11,7 @@ const Premium = () => {
         const response = await axios.get(BASE_URL + '/premium/verify',{
             withCredentials: true
         })
+        console.log(response)
         if(response.data.isPremium){
             setIsUserPremium(true)
         }
@@ -53,7 +54,7 @@ const Premium = () => {
     }
   };
 
-  return  isUserPremium ? <h1> " You're already a premium user. " </h1> : 
+  return  isUserPremium ? <h1 className = 'text-3xl text-center'> You're already a premium user. </h1> : 
     <div className="flex  flex-col lg:flex-row m-auto p-10">
       <div className="card bg-base-300 rounded-box grid h-80 grow place-items-center p-10">
         <h1 className="font-bold text-4xl"> Silver Membership</h1>
