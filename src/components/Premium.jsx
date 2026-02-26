@@ -45,7 +45,11 @@ const Premium = () => {
         theme: {
           color: "#3399cc",
         },
-        handler: verifyPremiumUser
+        handler: async function () {
+            setTimeout(() => {
+                verifyPremiumUser();
+            }, 3000);
+        }
       };
       const rzp = new window.Razorpay(options);
       rzp.open();
