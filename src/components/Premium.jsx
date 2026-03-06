@@ -23,10 +23,10 @@ const Premium = () => {
         { membershipType },
         { withCredentials: true },
       );
-      const { key, notes, orderId, amount } = order.data
+      const { keyId, notes, orderId, amount } = order.data
       // It should open the Razorpay Dialog Box
       const options = {
-        key, // Enter the Key ID generated from the Dashboard
+        key: keyId, // Enter the Key ID generated from the Dashboard
         amount, // Amount is in currency subunits.
         currency: "INR",
         name: "Dev Tinder", //your business name
