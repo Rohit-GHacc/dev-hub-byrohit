@@ -33,8 +33,8 @@ const Connections = () => {
           className="flex items-center justify-between bg-base-300 w-full max-w-2xl my-2 p-4 rounded-2xl shadow-sm"
         >
           {/* Left */}
-          <div className="w-full flex items-center justify-between gap-4">
-            <div className = 'flex items-center gap-4'>
+          <div className="w-full flex items-center justify-between gap-4 ">
+            <div className = 'flex items-center gap-4 max-w-3/4'>
               <div className="w-16 h-16 rounded-full bg-white overflow-hidden shrink-0">
                 <img
                   src={c.photoURL}
