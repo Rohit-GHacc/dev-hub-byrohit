@@ -48,7 +48,7 @@ const Chat = () => {
 
   const fetchChatMessages = async()=>{
     const chat = await axios.get(BASE_URL + '/chat/' + targetUserId, {withCredentials: true})
-
+    if (!chat?.data?.messages) return;
     console.log(chat.data.messages[0].senderId._id)
     const chatMessages = chat?.data.messages.map(msg =>{
         return { firstName : msg.senderId.firstName, lastName: msg.senderId.lastName, text: msg.text}
