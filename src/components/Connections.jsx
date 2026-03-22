@@ -59,7 +59,7 @@ const Connections = () => {
                 )}
               </div>
             </div>
-            <Link to={'/chat/'+c._id}><button className="btn btn-primary m-2 "> <img className = 'w-8 h-8' src = '../../assets/chat.png'/></button> </Link>
+            <Link to={'/chat/'+c._id}><button className="btn btn-primary m-2 "> <img className = 'w-8 h-8' src = '/chat.png'/></button> </Link>
           </div>
         </div>
       ))}

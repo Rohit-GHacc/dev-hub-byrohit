@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../utils/constants";
-import axios from 'axios'
+import axios from "axios";
 
 const Chat = () => {
   const { targetUserId } = useParams();
@@ -12,7 +12,7 @@ const Chat = () => {
   //   console.log(targetUserId);
   const user = useSelector((store) => store.user);
   const userId = user?._id;
-  const socketRef = useRef(null)
+  const socketRef = useRef(null);
   // as soon as the page loads, connect to the server
   useEffect(() => {
     if (!userId) return;
@@ -46,31 +46,44 @@ const Chat = () => {
     setNewMessage("");
   };
 
-  const fetchChatMessages = async()=>{
-    const chat = await axios.get(BASE_URL + '/chat/' + targetUserId, {withCredentials: true})
+  const fetchChatMessages = async () => {
+    const chat = await axios.get(BASE_URL + "/chat/" + targetUserId, {
+      withCredentials: true,
+    });
     if (!chat?.data?.messages) return;
-    console.log(chat.data.messages[0].senderId._id)
-    const chatMessages = chat?.data.messages.map(msg =>{
-        return { firstName : msg.senderId.firstName, lastName: msg.senderId.lastName, text: msg.text}
-    })
-    setMessages(chatMessages)
-  }
-  useEffect(()=>{
-        fetchChatMessages()
-    },[])
+    console.log(chat.data.messages[0].senderId._id);
+    const chatMessages = chat?.data.messages.map((msg) => {
+      return {
+        firstName: msg.senderId.firstName,
+        lastName: msg.senderId.lastName,
+        text: msg.text,
+      };
+    });
+    setMessages(chatMessages);
+  };
+  useEffect(() => {
+    fetchChatMessages();
+  }, []);
   return (
     <div className="w-1/2 mx-auto my-5 h-[70vh] text-center border border-gray-600 flex flex-col">
-      <h1 className="p-5 border-b border-gray-600 text-2xl"> Chat </h1>
+      <div className="grid grid-cols-5 justify-around p-5 border-b border-gray-600 text-2xl">
+        <Link className="text-xl cursor-pointer border rounded-full w-10" to='/connections'> {'←'} </Link>
+        <h1 className="col-span-3 font-bold"> Chat </h1>
+      </div>
       <div className="flex-1 overflow-scroll p-5">
         {messages.map((msg) => {
+          console.log(msg.firstName === user.firstName);
           return (
-              <div className={`chat chat-${msg.firstName === user.firstName ? 'start' : 'end'}`} key={[msg.firstName, msg.txt].join('-')}>
-                <div className="chat-header">
-                  {msg.firstName + ' ' + msg.lastName}
-                </div>
-                <div className="chat-bubble">{msg.text}</div>
-                <div className="chat-footer opacity-50">Seen</div>
+            <div
+              className={`chat chat-${msg.firstName === user.firstName ? "start" : "end"}`}
+              key={[msg.firstName, msg.txt].join("-")}
+            >
+              <div className="chat-header">
+                {msg.firstName + " " + msg.lastName}
               </div>
+              <div className="chat-bubble">{msg.text}</div>
+              <div className="chat-footer opacity-50">Seen</div>
+            </div>
           );
         })}
       </div>
