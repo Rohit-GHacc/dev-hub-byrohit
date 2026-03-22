@@ -24,9 +24,9 @@ const Chat = () => {
       targetUserId,
     });
 
-    socketRef.current.on("messageReceived", ({ firstName, lastName, text }) => {
-      console.log(firstName + " : " + text);
-      setMessages((messages) => [...messages, { firstName, lastName, text }]);
+    socketRef.current.on("messageReceived", ({ senderId, firstName, lastName, text }) => {
+    //   console.log(firstName + " : " + text);
+      setMessages((messages) => [...messages, { senderId, firstName, lastName, text }]);
     });
     // when the component unmounts, return statement is executed
     return () => {
@@ -51,9 +51,11 @@ const Chat = () => {
       withCredentials: true,
     });
     if (!chat?.data?.messages) return;
-    console.log(chat.data.messages[0].senderId._id);
+    // console.log(chat);
     const chatMessages = chat?.data.messages.map((msg) => {
       return {
+        msgId: msg._id,
+        senderId: msg.senderId._id,
         firstName: msg.senderId.firstName,
         lastName: msg.senderId.lastName,
         text: msg.text,
@@ -72,11 +74,11 @@ const Chat = () => {
       </div>
       <div className="flex-1 overflow-scroll p-5">
         {messages.map((msg) => {
-          console.log(msg.firstName === user.firstName);
+        //   console.log(msg.senderId, userId);
           return (
             <div
-              className={`chat chat-${msg.firstName === user.firstName ? "start" : "end"}`}
-              key={[msg.firstName, msg.txt].join("-")}
+              className={`chat chat-${msg.senderId === userId ? "start" : "end"}`}
+              key={msg.id}
             >
               <div className="chat-header">
                 {msg.firstName + " " + msg.lastName}
