@@ -25,10 +25,10 @@ const NavBar = () => {
       {/* Logo */}
       <div className="flex-1">
         {user ? <Link to="/" className="text-3xl font-bold tracking-wide flex items-center cursor-pointer gap-4">
-           <img className = 'w-10' src = '/logo.jpg'/>  <span > DevHub</span> 
+           <img className = 'w-10 rounded-tr-2xl rounded-br-2xl rounded-l' src = '/logo.jpg'/>  <span > DevHub</span> 
         </Link> : 
         <div  className="text-3xl font-bold tracking-wide flex items-center cursor-pointer gap-4">
-           <img className = 'w-10' src = '/logo.jpg'/>  <span>DevHub</span>
+           <img className = 'w-10 rounded-r-2xl rounded-l' src = '/logo.jpg'/>  <span>DevHub</span>
         </div> 
         }
       </div>

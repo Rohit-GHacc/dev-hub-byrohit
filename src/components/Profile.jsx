@@ -16,6 +16,7 @@ const Profile = () => {
   const [error, setError] = useState("");
   const [toast, setToast] = useState(false);
   // console.log('in profile' , user)
+  const [file, setFile] = useState(null);
 
   const user = useSelector((store) => store.user);
   useEffect(() => {
@@ -35,7 +36,7 @@ const Profile = () => {
       const response = await axios.patch(
         BASE_URL + "/profile/edit",
         { firstName, lastName, gender, age, about, skills, photoURL },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       setToast(true);
       console.log(response.data);
@@ -45,6 +46,22 @@ const Profile = () => {
     } catch (err) {
       setError(err.message);
     }
+  };
+  const handleUpload = async () => {
+    const formData = new FormData();
+    // formData.append("firstName", firstName);
+    // formData.append("lastName", lastName);
+    // formData.append("gender", gender);
+    // formData.append("age", age);
+    // formData.append("about", about);
+    // formData.append("skills", skills);
+    formData.append("image", file);
+
+    const res = await axios.post(BASE_URL + "/profile/upload", formData, {
+      withCredentials: true,
+    });
+    setPhotoURL(res.data.photoURL)
+    console.log(res.data);
   };
   if (!user) return <div>LOADING...</div>;
   return (
@@ -98,7 +115,6 @@ const Profile = () => {
 
               {[
                 ["About", about, setAbout],
-                ["Photo URL", photoURL, setPhotoURL],
                 ["Skills", skills, setSkills],
               ].map(([label, value, setter]) => (
                 <div key={label} className="flex flex-col gap-1">
@@ -110,7 +126,22 @@ const Profile = () => {
                   />
                 </div>
               ))}
-
+              <div className="flex gap-3 items-center m-2 ">
+                <label for="file" className="font-medium">
+                  {" "}
+                  Upload Image{" "}
+                </label>
+                <input
+                  className="file-input"
+                  name="file"
+                  type="file"
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
+                <button className="btn btn-secondary" onClick={handleUpload}>
+                  {" "}
+                  Upload{" "}
+                </button>
+              </div>
               {error && <p className="text-error text-sm">{error}</p>}
 
               <button
