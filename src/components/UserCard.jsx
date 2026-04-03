@@ -78,7 +78,7 @@ const UserCard = ({ user, isFeed = false }) => {
           )}
 
           {/* FIXED TEXT AREA */}
-          <p className="text-sm text-gray-600 mt-2 line-clamp-2 min-h-[40px]">
+          <p className="text-sm text-gray-600 mt-2 line-clamp-2 min-h-10">
             {user?.about || "No bio available"}
           </p>
 

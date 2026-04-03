@@ -174,7 +174,7 @@ const Profile = () => {
             <textarea
               value={form.about}
               onChange={(e) => handleChange("about", e.target.value)}
-              className="peer w-full border border-gray-300 rounded-lg px-3 pt-5 pb-2 min-h-[80px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="peer w-full border border-gray-300 rounded-lg px-3 pt-5 pb-2 min-h-20 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder=" "
             />
             <label
@@ -195,7 +195,7 @@ const Profile = () => {
             <textarea
               value={form.skills}
               onChange={(e) => handleChange("skills", e.target.value)}
-              className="peer w-full border border-gray-300 rounded-lg px-3 pt-5 pb-2 min-h-[60px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="peer w-full border border-gray-300 rounded-lg px-3 pt-5 pb-2 min-h-15 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder=" "
             />
             <label
@@ -227,7 +227,7 @@ const Profile = () => {
                 />
               </label>
 
-              <span className="text-sm text-gray-500 truncate max-w-[150px]">
+              <span className="text-sm text-gray-500 truncate max-w-37.5">
                 {file ? file.name : "No file selected"}
               </span>
 

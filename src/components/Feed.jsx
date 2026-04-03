@@ -39,7 +39,7 @@ const Feed = () => {
   }
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100">
+    <div className="min-h-[80vh] flex items-center justify-center bg-linear-to-br from-blue-50 to-gray-100">
       
       {/* Card Container */}
       <div className="relative flex items-center justify-center w-full">

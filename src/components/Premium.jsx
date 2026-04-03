@@ -58,42 +58,94 @@ const Premium = () => {
     }
   };
 
-  return  isUserPremium ? <h1 className = 'text-3xl text-center'> You're already a premium user. </h1> : 
-    <div className="flex  flex-col lg:flex-row m-auto p-10">
-      <div className="card bg-base-300 rounded-box grid h-80 grow place-items-center p-10">
-        <h1 className="font-bold text-4xl"> Silver Membership</h1>
-        <ul>
-          <li>Blue Tick</li>
-          <li>Real-time Chatting</li>
-          <li>100 Connection Requests per day</li>
-          <li>3 months</li>
-        </ul>
-        <button
-          className="btn btn-secondary"
-          onClick={() => buyMembership("silver")}
-        >
-          {" "}
-          Buy Silver Membership
-        </button>
-      </div>
-      <div className="divider lg:divider-horizontal">OR</div>
-      <div className="card bg-base-300 rounded-box grid h-80 grow place-items-center p-10">
-        <h1 className="font-bold text-4xl"> Gold Membership</h1>
-        <ul>
-          <li>Blue Tick</li>
-          <li>Real-time Chatting</li>
-          <li>Infinite Connection Requests per day</li>
-          <li>6 months</li>
-        </ul>
-        <button
-          className="btn btn-primary"
-          onClick={() => buyMembership("gold")}
-        >
-          {" "}
-          Buy Gold Membership
-        </button>
-      </div>
+  return isUserPremium ? (
+  <div className="flex items-center justify-center h-[70vh] text-center">
+    <div>
+      <h1 className="text-3xl font-semibold text-gray-800">
+        You're already a Premium User 🎉
+      </h1>
+      <p className="text-gray-500 mt-2">
+        Enjoy all the exclusive features 🚀
+      </p>
     </div>
+  </div>
+) : (
+  <div className="min-h-[90vh] bg-linear-to-br from-blue-50 to-gray-100 px-4 py-10">
+
+    <div className="max-w-5xl mx-auto text-center mb-10">
+      <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
+        Upgrade to Premium
+      </h1>
+      <p className="text-gray-500 mt-2">
+        Unlock powerful features and boost your networking 🚀
+      </p>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+
+      {/* SILVER */}
+      <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-6 flex flex-col justify-between">
+        
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+            Silver
+          </h2>
+          <p className="text-gray-500 mb-4">For growing users</p>
+
+          <ul className="space-y-2 text-sm text-gray-600">
+            <li>✔️ Blue Verification Badge</li>
+            <li>✔️ Real-time Chat Access</li>
+            <li>✔️ 100 Connection Requests / day</li>
+            <li>✔️ Priority Profile Visibility</li>
+            <li>✔️ Basic Profile Insights</li>
+            <li>✔️ 3 Months Access</li>
+          </ul>
+        </div>
+
+        <button
+          onClick={() => buyMembership("silver")}
+          className="mt-6 w-full bg-gray-800 text-white py-2 rounded-lg hover:bg-black transition"
+        >
+          Get Silver
+        </button>
+      </div>
+
+      {/* GOLD (Highlighted) */}
+      <div className="relative bg-white border-2 border-blue-600 rounded-2xl shadow-lg p-6 flex flex-col justify-between">
+        
+        {/* Badge */}
+        <span className="absolute top-3 right-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-full">
+          Most Popular
+        </span>
+
+        <div>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-2">
+            Gold
+          </h2>
+          <p className="text-gray-500 mb-4">For power users</p>
+
+          <ul className="space-y-2 text-sm text-gray-600">
+            <li>✔️ Everything in Silver</li>
+            <li>✔️ Unlimited Connection Requests</li>
+            <li>✔️ Boosted Profile Visibility</li>
+            <li>✔️ See Who Viewed Your Profile</li>
+            <li>✔️ Advanced Profile Insights</li>
+            <li>✔️ Priority Chat Responses</li>
+            <li>✔️ 6 Months Access</li>
+          </ul>
+        </div>
+
+        <button
+          onClick={() => buyMembership("gold")}
+          className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          Get Gold
+        </button>
+      </div>
+
+    </div>
+  </div>
+);
   
   ; 
 };
