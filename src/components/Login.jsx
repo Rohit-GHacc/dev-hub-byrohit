@@ -12,101 +12,105 @@ const Login = () => {
   const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
   const [isLoginForm, setIsLoginForm] = useState(true);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSignIn = async () => {
     try {
       if (isLoginForm) {
-        const data = await axios.post(
+        const res = await axios.post(
           BASE_URL + "/login",
           { email, password },
           { withCredentials: true }
         );
-        // console.log(data);
-        dispatch(addUser(data.data));
+
+        dispatch(addUser(res.data));
         navigate("/");
-      }else{
-        const data = await axios.post(`${BASE_URL}/createUser`,{email, password, firstName, lastName},{withCredentials: true})
-        console.log(data);
-        dispatch(addUser(data.data))
-        navigate('/profile')
+      } else {
+        const res = await axios.post(
+          `${BASE_URL}/createUser`,
+          { email, password, firstName, lastName },
+          { withCredentials: true }
+        );
+
+        dispatch(addUser(res.data));
+        navigate("/profile");
       }
     } catch (err) {
-      setError(err.response.data || "Something went wrong");
-      // console.log(err.response.data || err.message);
+      setError(err?.response?.data || "Something went wrong");
     }
   };
 
   return (
-  <div className="flex flex-1 items-center justify-center px-4">
-    <div className="card bg-base-300 w-full max-w-sm shadow-xl">
-      <div className="card-body">
-        <h2 className="text-3xl font-bold text-center mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-gray-100 px-4">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-2xl p-6">
+        
+        <h2 className="text-2xl font-bold text-center mb-6">
           {isLoginForm ? "Welcome Back" : "Create Account"}
         </h2>
 
+        {/* Signup Fields */}
         {!isLoginForm && (
-          <div className="flex flex-col gap-4">
-            <div>
-              <label className="text-sm">First Name</label>
-              <input
-                type="text"
-                className="input input-bordered w-full"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </div>
-            <div>
-              <label className="text-sm">Last Name</label>
-              <input
-                type="text"
-                className="input input-bordered w-full"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </div>
+          <div className="flex flex-col gap-4 mb-4">
+            <input
+              type="text"
+              placeholder="First Name"
+              className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Last Name"
+              className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
           </div>
         )}
 
-        <div className="flex flex-col gap-4 mt-2">
-          <div>
-            <label className="text-sm">Email</label>
-            <input
-              type="email"
-              className="input input-bordered w-full"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+        {/* Common Fields */}
+        <div className="flex flex-col gap-4">
+          <input
+            type="email"
+            placeholder="Email"
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-          <div>
-            <label className="text-sm">Password</label>
-            <input
-              type="password"
-              className="input input-bordered w-full"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+          <input
+            type="password"
+            placeholder="Password"
+            className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
 
-        {error && <p className="text-error text-sm mt-2">{error}</p>}
+        {/* Error */}
+        {error && (
+          <p className="text-red-500 text-sm mt-3 text-center">{error}</p>
+        )}
 
+        {/* Button */}
         <button
-          className="btn btn-secondary btn-sm mt-6 w-full"
           onClick={handleSignIn}
+          className="w-full mt-6 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
         >
           {isLoginForm ? "Sign In" : "Sign Up"}
         </button>
 
+        {/* Toggle */}
         <p
-          className="text-center text-sm mt-4 cursor-pointer opacity-80 hover:opacity-100"
+          className="text-center text-sm mt-4 text-gray-600 cursor-pointer hover:underline"
           onClick={() => {
             setEmail("");
             setPassword("");
             setFirstName("");
             setLastName("");
+            setError("");
             setIsLoginForm((prev) => !prev);
           }}
         >
@@ -116,9 +120,7 @@ const Login = () => {
         </p>
       </div>
     </div>
-  </div>
-);
-
+  );
 };
 
 export default Login;
