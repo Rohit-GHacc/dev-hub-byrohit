@@ -79,7 +79,7 @@ const Connections = () => {
               </div>
 
               {/* Chat Button */}
-              <Link to={`/chat/${c._id}`}>
+              <Link to={`/app/chat/${c._id}`}>
                 <button className="ml-4 w-10 h-10 flex items-center justify-center rounded-full bg-blue-600 text-white hover:bg-blue-700 transition shadow-sm cursor-pointer">
                   {/* SVG Chat Icon */}
                   <svg

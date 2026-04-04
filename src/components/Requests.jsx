@@ -62,7 +62,7 @@ const Requests = () => {
   }
 
   return (
-    <div className="min-h-[80vh] bg-gradient-to-br from-blue-50 to-gray-100 px-4 py-8">
+    <div className="min-h-[80vh] bg-linear-to-br from-blue-50 to-gray-100 px-4 py-8">
       
       <div className="max-w-4xl mx-auto">
 
