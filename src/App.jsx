@@ -11,6 +11,7 @@ import Requests from "./components/Requests";
 import Premium from "./components/Premium";
 import Chat from "./components/Chat";
 import { Toaster } from "react-hot-toast";
+import Landing from "./components/Landing";
 
 function App() {
   return (
@@ -29,14 +30,18 @@ function App() {
               }}
             />
             <Routes>
-              <Route path="/" element={<Body />}>
-                <Route path="/" element={<Feed />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/connections" element={<Connections />} />
-                <Route path="/requests" element={<Requests />} />
-                <Route path="/premium" element={<Premium />} />
-                <Route path="/chat/:targetUserId" element={<Chat />} />
+              {/* PUBLIC */}
+              <Route path="/" element={<Landing />} />
+              <Route path="/login" element={<Login />} />
+
+              {/* PROTECTED APP */}
+              <Route path="/app" element={<Body />}>
+                <Route path="profile" element={<Profile />} />
+                <Route path="connections" element={<Connections />} />
+                <Route path="requests" element={<Requests />} />
+                <Route path="premium" element={<Premium />} />
+                <Route path="chat/:targetUserId" element={<Chat />} />
+                <Route path="feed" element={<Feed />} />
               </Route>
             </Routes>
           </BrowserRouter>

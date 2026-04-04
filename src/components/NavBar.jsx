@@ -28,7 +28,7 @@ const NavBar = () => {
     try {
       await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
       dispatch(removeUser());
-      navigate("/login");
+      navigate("/");
     } catch (err) {
       console.log(err.message);
     }
@@ -38,7 +38,7 @@ const NavBar = () => {
 
       {/* Logo */}
       <div className="flex-1">
-        <Link to="/" className="flex items-center gap-3 text-xl font-semibold text-gray-800 cursor-pointer">
+        <Link to="/app/feed" className="flex items-center gap-3 text-xl font-semibold text-gray-800 cursor-pointer">
           <img className="w-10 h-10 rounded-xl" src="/logo.jpg" />
           DevHub
         </Link>
@@ -77,10 +77,10 @@ const NavBar = () => {
           {open && (
             <div className="absolute right-0 top-14 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-50">
               <ul className="py-2 text-sm text-gray-700">
-                <li><Link className="block px-4 py-2 hover:bg-gray-100" to="/profile">Profile</Link></li>
-                <li><Link className="block px-4 py-2 hover:bg-gray-100" to="/connections">Connections</Link></li>
-                <li><Link className="block px-4 py-2 hover:bg-gray-100" to="/requests">Requests</Link></li>
-                <li><Link className="block px-4 py-2 hover:bg-gray-100" to="/premium">Premium</Link></li>
+                <li><Link className="block px-4 py-2 hover:bg-gray-100" to="/app/profile">Profile</Link></li>
+                <li><Link className="block px-4 py-2 hover:bg-gray-100" to="/app/connections">Connections</Link></li>
+                <li><Link className="block px-4 py-2 hover:bg-gray-100" to="/app/requests">Requests</Link></li>
+                <li><Link className="block px-4 py-2 hover:bg-gray-100" to="/app/premium">Premium</Link></li>
                 <li>
                   <button
                     onClick={handleLogout}

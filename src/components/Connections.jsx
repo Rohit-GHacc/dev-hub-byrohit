@@ -23,7 +23,7 @@ const Connections = () => {
 
   if (!connections || connections.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[70vh] text-center">
+      <div className="flex flex-col items-center justify-center h-[70vh] text-center bg-linear-to-br from-blue-50 to-gray-100">
         <h2 className="text-2xl font-semibold text-gray-700">
           No connections yet
         </h2>
@@ -33,7 +33,7 @@ const Connections = () => {
   }
 
   return (
-    <div className="min-h-[80vh] bg-gradient-to-br from-blue-50 to-gray-100 px-4 py-8">
+    <div className="min-h-[80vh] bg-linear-to-br from-blue-50 to-gray-100 px-4 py-8">
       <div className="max-w-4xl mx-auto">
         {/* Heading */}
         <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">

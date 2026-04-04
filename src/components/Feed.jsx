@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Feed = () => {
   const dispatch = useDispatch();
-  const feed = useSelector((store) => store.feed);
+  const feed = useSelector((store) => store.feed || []);
 
   const getFeed = async () => {
     try {
@@ -26,8 +26,9 @@ const Feed = () => {
 
   // 🔹 Empty state
   if (!feed || feed.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[70vh] text-center px-4">
+  return (
+    <div className="min-h-[80vh] flex items-center justify-center bg-linear-to-br from-blue-50 to-gray-100 px-4">
+      <div className="text-center">
         <h2 className="text-2xl font-semibold text-gray-700">
           No new users found
         </h2>
@@ -35,8 +36,9 @@ const Feed = () => {
           Try again later or explore connections
         </p>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-linear-to-br from-blue-50 to-gray-100">

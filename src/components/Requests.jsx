@@ -50,7 +50,7 @@ const Requests = () => {
   // Empty state
   if (!requests || requests.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[70vh] text-center">
+      <div className="flex flex-col items-center justify-center h-[70vh] text-center bg-linear-to-br from-blue-50 to-gray-100">
         <h2 className="text-2xl font-semibold text-gray-700">
           No pending requests
         </h2>

@@ -25,7 +25,7 @@ const Footer = () => {
           {!user ? (
             <span className="text-gray-400 cursor-not-allowed">Home</span>
           ) : (
-            <Link to="/" className="text-gray-600 hover:text-blue-600 transition">
+            <Link to="/app/feed" className="text-gray-600 hover:text-blue-600 transition">
               Home
             </Link>
           )}
@@ -34,7 +34,7 @@ const Footer = () => {
           {!user ? (
             <span className="text-gray-400 cursor-not-allowed">Connections</span>
           ) : (
-            <Link to="/connections" className="text-gray-600 hover:text-blue-600 transition">
+            <Link to="/app/connections" className="text-gray-600 hover:text-blue-600 transition">
               Connections
             </Link>
           )}
@@ -43,7 +43,7 @@ const Footer = () => {
           {!user ? (
             <span className="text-gray-400 cursor-not-allowed">Profile</span>
           ) : (
-            <Link to="/profile" className="text-gray-600 hover:text-blue-600 transition">
+            <Link to="/app/profile" className="text-gray-600 hover:text-blue-600 transition">
               Profile
             </Link>
           )}

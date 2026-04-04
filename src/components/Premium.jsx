@@ -59,7 +59,7 @@ const Premium = () => {
   };
 
   return isUserPremium ? (
-  <div className="flex items-center justify-center h-[70vh] text-center">
+  <div className="flex items-center justify-center h-[70vh] text-center bg-linear-to-br from-blue-50 to-gray-100">
     <div>
       <h1 className="text-3xl font-semibold text-gray-800">
         You're already a Premium User 🎉
