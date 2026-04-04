@@ -5,7 +5,7 @@ import axios from "axios";
 import UserCard from "./UserCard";
 import { addUser } from "../store/userSlice";
 import toast from "react-hot-toast";
-
+import MotionBg from "./MotionBg";
 const Profile = () => {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
@@ -74,13 +74,14 @@ const Profile = () => {
     }
   };
 
-  if (!user) return <div className="text-center mt-10">Loading...</div>;
+  if (!user) return <div className="text-center mt-10 bg-linear-to-br from-blue-50 to-gray-100">Loading...</div>;
 
   return (
     <div className="min-h-[90vh] bg-linear-to-br from-blue-50 to-gray-100 px-4 py-10">
+      <MotionBg/>
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
         {/* FORM */}
-        <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-200">
+        <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-200 z-100">
           <h2 className="text-2xl font-semibold mb-6 text-gray-800">
             Edit Profile
           </h2>
@@ -259,7 +260,7 @@ const Profile = () => {
         </div>
 
         {/* PREVIEW */}
-        <div className="flex justify-center items-start">
+        <div className="flex justify-center items-start z-100">
           <UserCard user={form} />
         </div>
       </div>

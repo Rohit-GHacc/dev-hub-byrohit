@@ -34,7 +34,7 @@ const NavBar = () => {
     }
   };
   return (
-    <div className="w-full border-b border-gray-200 px-6 py-3 flex items-center justify-between shadow-sm sticky top-0 z-50 bg-white/80 backdrop-blur-md">
+    <div className="w-full border-b border-gray-200 px-6 py-3 flex items-center justify-between shadow-sm sticky top-0 z-200 bg-white/80 backdrop-blur-md">
 
       {/* Logo */}
       <div className="flex-1">

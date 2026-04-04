@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { Link } from "react-router-dom";
-
+import {motion} from 'framer-motion'
+import MotionBg from "./MotionBg";
 const Connections = () => {
   const [connections, setConnections] = useState([]);
 
@@ -24,6 +25,7 @@ const Connections = () => {
   if (!connections || connections.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-[70vh] text-center bg-linear-to-br from-blue-50 to-gray-100">
+        <MotionBg />
         <h2 className="text-2xl font-semibold text-gray-700">
           No connections yet
         </h2>
@@ -39,13 +41,13 @@ const Connections = () => {
         <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
           Your Connections
         </h1>
-
+        <MotionBg />
         {/* List */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 ">
           {connections.map((c) => (
             <div
               key={c._id}
-              className="flex items-center justify-between bg-white border border-gray-200 rounded-2xl shadow-sm p-4 hover:shadow-md transition"
+              className="flex items-center justify-between bg-white border border-gray-200 rounded-2xl shadow-sm p-4 hover:shadow-md transition z-100"
             >
               {/* Left Section */}
               <div className="flex items-center gap-4 flex-1">

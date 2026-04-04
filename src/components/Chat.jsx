@@ -83,7 +83,7 @@ const Chat = () => {
         {/* Header */}
         <div className="flex items-center gap-4 px-4 py-3 border-b border-gray-200">
           <Link
-            to="/connections"
+            to="/app/connections"
             className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition"
           >
             ←

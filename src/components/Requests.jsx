@@ -4,7 +4,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequests, removeRequest } from "../store/requestSlice";
 import toast from "react-hot-toast";
-
+import MotionBg from "./MotionBg";
 const Requests = () => {
   const dispatch = useDispatch();
   const requests = useSelector((store) => store.requests);
@@ -50,7 +50,8 @@ const Requests = () => {
   // Empty state
   if (!requests || requests.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[70vh] text-center bg-linear-to-br from-blue-50 to-gray-100">
+      <div className="flex flex-col items-center justify-center min-h-[80vh] text-center bg-linear-to-br from-blue-50 to-gray-100">
+         <MotionBg/>
         <h2 className="text-2xl font-semibold text-gray-700">
           No pending requests
         </h2>
@@ -63,7 +64,7 @@ const Requests = () => {
 
   return (
     <div className="min-h-[80vh] bg-linear-to-br from-blue-50 to-gray-100 px-4 py-8">
-      
+       <MotionBg/>
       <div className="max-w-4xl mx-auto">
 
         {/* Heading */}
@@ -81,7 +82,7 @@ const Requests = () => {
             return (
               <div
                 key={_id}
-                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white border border-gray-200 rounded-2xl shadow-sm p-4 hover:shadow-md transition"
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white border border-gray-200 rounded-2xl shadow-sm p-4 hover:shadow-md transition z-100 "
               >
                 
                 {/* Left */}

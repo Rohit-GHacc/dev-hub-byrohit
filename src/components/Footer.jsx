@@ -6,7 +6,7 @@ const Footer = () => {
   const user = useSelector((store) => store.user);
 
   return (
-    <footer className="bg-white border-t border-gray-200 px-6 py-10 mt-auto">
+    <footer className="bg-white border-t border-gray-200 px-6 py-10 mt-auto z-100">
   <div className="max-w-7xl mx-auto grid gap-8 md:grid-cols-3">
 
     {/* Branding */}

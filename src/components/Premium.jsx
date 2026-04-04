@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../utils/constants";
+import MotionBg from "./MotionBg";
 
 const Premium = () => {
     const [isUserPremium, setIsUserPremium] = useState(false)
@@ -59,7 +60,8 @@ const Premium = () => {
   };
 
   return isUserPremium ? (
-  <div className="flex items-center justify-center h-[70vh] text-center bg-linear-to-br from-blue-50 to-gray-100">
+  <div className="flex items-center justify-center min-h-[80vh] text-center bg-linear-to-br from-blue-50 to-gray-100">
+    <MotionBg />
     <div>
       <h1 className="text-3xl font-semibold text-gray-800">
         You're already a Premium User 🎉
@@ -71,7 +73,7 @@ const Premium = () => {
   </div>
 ) : (
   <div className="min-h-[90vh] bg-linear-to-br from-blue-50 to-gray-100 px-4 py-10">
-
+    <MotionBg />
     <div className="max-w-5xl mx-auto text-center mb-10">
       <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
         Upgrade to Premium

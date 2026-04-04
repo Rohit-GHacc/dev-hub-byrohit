@@ -54,10 +54,10 @@ const UserCard = ({ user, isFeed = false }) => {
         transition={{ duration: 0.3 }}
         
         // 🔥 FIXED SIZE (key part)
-        className="w-[320px] sm:w-85 h-105 bg-white border border-gray-200 rounded-2xl shadow-md overflow-hidden flex flex-col"
+        className="w-[320px] sm:w-85 h-150 bg-white border border-gray-200 rounded-2xl shadow-md overflow-hidden flex flex-col"
       >
         {/* IMAGE (ALWAYS FIXED) */}
-        <div className="w-full h-55 bg-gray-100 flex items-center justify-center overflow-hidden">
+        <div className="w-full h-[60%] bg-linear-to-br from-blue-100 to-gray-900 flex items-center justify-center overflow-hidden">
           <img
             src={user?.photoURL}
             alt={user?.firstName}
