@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../utils/api";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../store/feedSlice";
@@ -12,7 +12,7 @@ const UserCard = ({ user, isFeed = false }) => {
     try {
       const loadingToast = toast.loading("Processing...");
 
-      await axios.post(
+      await api.post(
         `${BASE_URL}/request/send/${status}/${userId}`,
         {},
         { withCredentials: true }

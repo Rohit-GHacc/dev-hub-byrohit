@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../store/userSlice";
-import axios from "axios";
+import api from "../utils/api";
 import { BASE_URL } from "../utils/constants";
 import { Link, useNavigate } from "react-router-dom";
 import { FaCheckDouble } from "react-icons/fa";
@@ -26,7 +26,7 @@ const NavBar = () => {
   // console.log(user)
   const handleLogout = async () => {
     try {
-      await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
+      await api.post(BASE_URL + "/logout", {}, { withCredentials: true });
       dispatch(removeUser());
       navigate("/");
     } catch (err) {

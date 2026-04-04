@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import { useDispatch } from "react-redux";
 import { addUser } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
@@ -24,16 +24,16 @@ const Login = () => {
         return;
       }
       if (isLoginForm) {
-        const res = await axios.post(
+        const res = await api.post(
           BASE_URL + "/login",
           { email, password },
           { withCredentials: true },
         );
-
+        localStorage.setItem('token',res.data.token)
         dispatch(addUser(res.data));
         navigate("/app/feed");
       } else {
-        const res = await axios.post(
+        const res = await api.post(
           `${BASE_URL}/createUser`,
           { email, password, firstName, lastName },
           { withCredentials: true },

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import { BASE_URL } from "../utils/constants";
 import { Link } from "react-router-dom";
 import {motion} from 'framer-motion'
@@ -9,7 +9,7 @@ const Connections = () => {
 
   const getConnections = async () => {
     try {
-      const res = await axios.get(BASE_URL + "/user/connections", {
+      const res = await api.get(BASE_URL + "/user/connections", {
         withCredentials: true,
       });
       setConnections(res.data.data);

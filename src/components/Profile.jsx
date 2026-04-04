@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { BASE_URL } from "../utils/constants";
-import axios from "axios";
+import api from "../utils/api";
 import UserCard from "./UserCard";
 import { addUser } from "../store/userSlice";
 import toast from "react-hot-toast";
@@ -43,7 +43,7 @@ const Profile = () => {
   const updateProfile = async () => {
     try {
       setLoading(true);
-      const res = await axios.patch(BASE_URL + "/profile/edit", form, {
+      const res = await api.patch(BASE_URL + "/profile/edit", form, {
         withCredentials: true,
       });
 
@@ -63,7 +63,7 @@ const Profile = () => {
     formData.append("image", file);
 
     try {
-      const res = await axios.post(BASE_URL + "/profile/upload", formData, {
+      const res = await api.post(BASE_URL + "/profile/upload", formData, {
         withCredentials: true,
       });
 

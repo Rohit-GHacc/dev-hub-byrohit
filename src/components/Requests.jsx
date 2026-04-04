@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { BASE_URL } from "../utils/constants";
-import axios from "axios";
+import api from "../utils/api";
 import { useDispatch, useSelector } from "react-redux";
 import { addRequests, removeRequest } from "../store/requestSlice";
 import toast from "react-hot-toast";
@@ -11,7 +11,7 @@ const Requests = () => {
 
   const fetchConnectionRequests = async () => {
     try {
-      const res = await axios.get(
+      const res = await api.get(
         `${BASE_URL}/user/requests/received`,
         { withCredentials: true }
       );
@@ -27,7 +27,7 @@ const Requests = () => {
 
   const reviewRequest = async (status, id, name) => {
     try {
-      await axios.post(
+      await api.post(
         `${BASE_URL}/request/review/${status}/${id}`,
         {},
         { withCredentials: true }
@@ -52,12 +52,15 @@ const Requests = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[80vh] text-center bg-linear-to-br from-blue-50 to-gray-100">
          <MotionBg/>
+
+        <div className="z-100 bg-white rounded-2xl shadow-md p-8 w-[40%]">
         <h2 className="text-2xl font-semibold text-gray-700">
           No pending requests
         </h2>
         <p className="text-gray-500 mt-2">
           You're all caught up 🎯
         </p>
+        </div>
       </div>
     );
   }

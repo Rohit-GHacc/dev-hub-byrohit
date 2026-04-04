@@ -1,7 +1,7 @@
 import UserCard from "./UserCard";
 import { useEffect } from "react";
 import { BASE_URL } from "../utils/constants";
-import axios from "axios";
+import api from "../utils/api";
 import { addFeed } from "../store/feedSlice";
 import { useDispatch, useSelector } from "react-redux";
 import MotionBg from "./MotionBg";
@@ -11,7 +11,7 @@ const Feed = () => {
 
   const getFeed = async () => {
     try {
-      const res = await axios.get(BASE_URL + "/user/feed", {
+      const res = await api.get(BASE_URL + "/user/feed", {
         withCredentials: true,
       });
       dispatch(addFeed(res.data.data));
@@ -29,7 +29,7 @@ const Feed = () => {
     return (
       <div className="min-h-[80vh] flex items-center justify-center relative overflow-hidden bg-linear-to-br from-blue-50 to-gray-100">
         <MotionBg/>
-        <div className="text-center">
+        <div className="z-100 bg-white rounded-2xl shadow-md p-8 text-center w-[40%]">
           <h2 className="text-2xl font-semibold text-gray-700">
             No new users found
           </h2>
