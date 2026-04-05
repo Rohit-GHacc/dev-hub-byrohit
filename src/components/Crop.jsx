@@ -73,7 +73,7 @@ const Crop = () => {
     });
 
     navigate("/app/profile", {
-      state: { croppedImage: file,index },
+      state: { croppedImage: file,index, files: state.files},
     });
   };
 

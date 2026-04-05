@@ -29,17 +29,22 @@ const Profile = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (location.state?.croppedImage) {
-      const file = location.state.croppedImage;
-      const index = location.state.index;
-      setFiles((prevFiles)=>{
-        const updated = [...prevFiles];
-        updated[index] = file
-        return updated
-      });
-      navigate("/app/profile", { replace: true });
+  if (location.state?.croppedImage) {
+    const file = location.state.croppedImage;
+    const index = location.state.index;
+    const filesFromState = location.state.files;
+
+    if (!filesFromState || filesFromState.length === 0) return;
+
+    const updated = [...filesFromState];
+
+    if (index >= 0 && index < updated.length) {
+      updated[index] = file;
     }
-  }, [location.state]);
+
+    setFiles(updated);
+  }
+}, [location.state]);
   useEffect(() => {
     if (!user) return;
     setForm({
@@ -95,7 +100,7 @@ const Profile = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-
+      // setFiles(res.data.images)
       handleChange("images", res.data.images);
       toast.success("Image uploaded 📸");
     } catch {
@@ -268,8 +273,10 @@ const Profile = () => {
               </span>
               <button
                 onClick={() => {
-                  if (!files) return;
-                  navigate("/app/crop", { state: {file: files[0], index:0} });
+                  if (!files.length) return;
+                  navigate("/app/crop", {
+                    state: { file: files[0], index: 0, files: files },
+                  });
                 }}
                 className="bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 transition text-sm rounded-lg cursor-pointer"
               >
@@ -284,15 +291,20 @@ const Profile = () => {
             </div>
 
             {/* Preview */}
-            {Array.isArray(files) && files.length > 0 && (
+            {
+            Array.isArray(files) && files.length > 0 && (
               <div className="flex gap-2">
                 {files.map((file, i) => (
                   <img
-                    key = {i}
+                    key={i}
                     src={URL.createObjectURL(file)}
                     alt="preview"
                     className="mt-3 w-20 h-20 rounded-full object-cover border"
-                    onClick = {()=> navigate('/app/crop',{state: { file: files[i] ,index: i}})}
+                    onClick={() =>
+                      navigate("/app/crop", {
+                        state: { file: files[i], index: i, files: files },
+                      })
+                    }
                   />
                 ))}
               </div>
