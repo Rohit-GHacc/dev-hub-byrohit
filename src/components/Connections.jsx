@@ -54,7 +54,7 @@ const Connections = () => {
                 {/* Avatar */}
                 <div className="w-14 h-14 rounded-full overflow-hidden border">
                   <img
-                    src={c.photoURL}
+                    src={c.images[0]}
                     alt={c.firstName}
                     className="w-full h-full object-cover"
                   />

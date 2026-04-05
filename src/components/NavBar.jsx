@@ -69,7 +69,7 @@ const NavBar = () => {
 
           {/* Avatar */}
           <img
-            src={user.photoURL}
+            src={user.images[0]}
             className="w-10 h-10 rounded-full border-2 border-gray-200 cursor-pointer"
             onClick={() => setOpen((prev) => !prev)}
           />

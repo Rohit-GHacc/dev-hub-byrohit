@@ -6,10 +6,13 @@ import UserCard from "./UserCard";
 import { addUser } from "../store/userSlice";
 import toast from "react-hot-toast";
 import MotionBg from "./MotionBg";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
 const Profile = () => {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
-
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -17,12 +20,26 @@ const Profile = () => {
     age: "",
     about: "",
     skills: "",
-    photoURL: "",
+    images: "",
   });
 
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.croppedImage) {
+      const file = location.state.croppedImage;
+      const index = location.state.index;
+      setFiles((prevFiles)=>{
+        const updated = [...prevFiles];
+        updated[index] = file
+        return updated
+      });
+      navigate("/app/profile", { replace: true });
+    }
+  }, [location.state]);
   useEffect(() => {
     if (!user) return;
     setForm({
@@ -32,10 +49,15 @@ const Profile = () => {
       age: user.age || "",
       about: user.about || "",
       skills: user.skills || "",
-      photoURL: user.photoURL || "",
+      images: user.images || "",
     });
   }, [user]);
-
+  useEffect(() => {
+    if (files.length > 6) {
+      toast.error("You cannot select more than 6 images");
+      setFiles([]);
+    }
+  }, [files]);
   const handleChange = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
@@ -57,28 +79,40 @@ const Profile = () => {
   };
 
   const handleUpload = async () => {
-    if (!file) return;
+    if (Array.isArray(files) && files.length === 0) return;
 
     const formData = new FormData();
-    formData.append("image", file);
+    // formData.append("image", fileToUpload);
+    files.map((file) => {
+      formData.append("images", file);
+    });
+    // formData.append('images',files)
 
     try {
       const res = await api.post(BASE_URL + "/profile/upload", formData, {
         withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      handleChange("photoURL", res.data.photoURL);
+      handleChange("images", res.data.images);
       toast.success("Image uploaded 📸");
     } catch {
       toast.error("Upload failed");
     }
   };
 
-  if (!user) return <div className="text-center mt-10 bg-linear-to-br from-blue-50 to-gray-100">Loading...</div>;
-
+  if (!user)
+    return (
+      <div className="text-center mt-10 bg-linear-to-br from-blue-50 to-gray-100">
+        Loading...
+      </div>
+    );
+  console.log("files: ", files, "isArray: ", Array.isArray(files));
   return (
     <div className="min-h-[90vh] bg-linear-to-br from-blue-50 to-gray-100 px-4 py-10">
-      <MotionBg/>
+      <MotionBg />
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
         {/* FORM */}
         <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-200 z-100">
@@ -220,33 +254,48 @@ const Profile = () => {
 
             <div className="flex items-center gap-4 flex-wrap">
               <label className="cursor-pointer bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-black transition text-sm">
-                Choose Image
+                Add Image
                 <input
                   type="file"
                   className="hidden"
-                  onChange={(e) => setFile(e.target.files[0])}
+                  multiple
+                  onChange={(e) => setFiles(Array.from(e.target.files))}
                 />
               </label>
 
               <span className="text-sm text-gray-500 truncate max-w-37.5">
-                {file ? file.name : "No file selected"}
+                {files[0] ? files[0].name : "No file selected"}
               </span>
-
+              <button
+                onClick={() => {
+                  if (!files) return;
+                  navigate("/app/crop", { state: {file: files[0], index:0} });
+                }}
+                className="bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 transition text-sm rounded-lg cursor-pointer"
+              >
+                Edit Image
+              </button>
               <button
                 onClick={handleUpload}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm"
+                className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm"
               >
                 Upload
               </button>
             </div>
 
             {/* Preview */}
-            {file && (
-              <img
-                src={URL.createObjectURL(file)}
-                alt="preview"
-                className="mt-3 w-20 h-20 rounded-full object-cover border"
-              />
+            {Array.isArray(files) && files.length > 0 && (
+              <div className="flex gap-2">
+                {files.map((file, i) => (
+                  <img
+                    key = {i}
+                    src={URL.createObjectURL(file)}
+                    alt="preview"
+                    className="mt-3 w-20 h-20 rounded-full object-cover border"
+                    onClick = {()=> navigate('/app/crop',{state: { file: files[i] ,index: i}})}
+                  />
+                ))}
+              </div>
             )}
           </div>
 

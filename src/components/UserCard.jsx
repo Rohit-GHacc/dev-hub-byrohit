@@ -59,7 +59,7 @@ const UserCard = ({ user, isFeed = false }) => {
         {/* IMAGE (ALWAYS FIXED) */}
         <div className="w-full h-[60%] bg-linear-to-br from-blue-100 to-gray-900 flex items-center justify-center overflow-hidden">
           <img
-            src={user?.photoURL}
+            src={user?.images[0]}
             alt={user?.firstName}
             className="w-full h-full object-cover"
           />

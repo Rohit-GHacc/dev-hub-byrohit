@@ -12,6 +12,7 @@ import Premium from "./components/Premium";
 import Chat from "./components/Chat";
 import { Toaster } from "react-hot-toast";
 import Landing from "./components/Landing";
+import Crop from "./components/Crop";
 
 function App() {
   return (
@@ -36,12 +37,13 @@ function App() {
 
               {/* PROTECTED APP */}
               <Route path="/app" element={<Body />}>
-                <Route path="profile" element={<Profile />} />
+                <Route path="profile" element={<Profile />}/>
                 <Route path="connections" element={<Connections />} />
                 <Route path="requests" element={<Requests />} />
                 <Route path="premium" element={<Premium />} />
                 <Route path="chat/:targetUserId" element={<Chat />} />
                 <Route path="feed" element={<Feed />} />
+                <Route path = 'crop' element = {<Crop/>} />
               </Route>
             </Routes>
           </BrowserRouter>

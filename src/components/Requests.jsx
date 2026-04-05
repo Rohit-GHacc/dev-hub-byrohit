@@ -79,7 +79,7 @@ const Requests = () => {
         <div className="flex flex-col gap-4">
           {requests.map((request) => {
              if (!request.fromUserId) return null; 
-            const { _id, firstName, lastName, about, age, gender, photoURL } =
+            const { _id, firstName, lastName, about, age, gender, images } =
               request.fromUserId;
 
             return (
@@ -94,7 +94,7 @@ const Requests = () => {
                   {/* Avatar */}
                   <div className="w-14 h-14 rounded-full overflow-hidden border">
                     <img
-                      src={photoURL}
+                      src={images[0]}
                       alt={firstName}
                       className="w-full h-full object-cover"
                     />
