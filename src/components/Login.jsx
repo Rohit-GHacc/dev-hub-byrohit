@@ -25,21 +25,21 @@ const Login = () => {
       }
       if (isLoginForm) {
         const res = await api.post(
-          BASE_URL + "/login",
+          "/login",
           { email, password },
           { withCredentials: true },
         );
         localStorage.setItem('token',res.data.token)
-        dispatch(addUser(res.data));
+        dispatch(addUser(res.data.user));
         navigate("/app/feed");
       } else {
         const res = await api.post(
-          `${BASE_URL}/createUser`,
+          `/createUser`,
           { email, password, firstName, lastName },
           { withCredentials: true },
         );
 
-        dispatch(addUser(res.data));
+        dispatch(addUser(res.data.user));
         navigate("/app/profile");
       }
     } catch (err) {

@@ -4,9 +4,13 @@ import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../store/feedSlice";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const UserCard = ({ user, isFeed = false }) => {
   const dispatch = useDispatch();
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const images = user.images.length ? user.images : [];
 
   const handleStatus = async (status, userId) => {
     try {
@@ -15,7 +19,7 @@ const UserCard = ({ user, isFeed = false }) => {
       await api.post(
         `${BASE_URL}/request/send/${status}/${userId}`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       toast.dismiss(loadingToast);
@@ -33,6 +37,15 @@ const UserCard = ({ user, isFeed = false }) => {
     }
   };
 
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % user.images.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex(
+      (prev) => (prev - 1 + user.images.length) % user.images.length,
+    );
+  };
   return (
     <div className="flex justify-center px-4 py-6 sm:py-8">
       <motion.div
@@ -52,17 +65,36 @@ const UserCard = ({ user, isFeed = false }) => {
         whileHover={{ scale: 1.02 }}
         whileDrag={isFeed ? { scale: 1.05 } : {}}
         transition={{ duration: 0.3 }}
-        
         // 🔥 FIXED SIZE (key part)
         className="w-[320px] sm:w-85 h-150 bg-white border border-gray-200 rounded-2xl shadow-md overflow-hidden flex flex-col"
       >
         {/* IMAGE (ALWAYS FIXED) */}
-        <div className="w-full h-[60%] bg-linear-to-br from-blue-100 to-gray-900 flex items-center justify-center overflow-hidden">
+        <div className="relative w-full h-[60%] overflow-hidden rounded-t-2xl">
+          {/* Image */}
           <img
-            src={user?.images[0]}
-            alt={user?.firstName}
-            className="w-full h-full object-cover"
+            src={images[currentIndex]}
+            alt="user"
+            className="w-full h-full object-cover transition duration-300"
           />
+
+          {images.length > 1 && (
+            <>
+            {/* left arrow */}
+              <button
+                onClick={handlePrev}
+                className="absolute top-1/2 left-2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition"
+              >
+                ←
+              </button>
+              {/* right arrow */}
+              <button
+                onClick={handleNext}
+                className="absolute top-1/2 right-2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full hover:bg-black/60 transition"
+              >
+                →
+              </button>
+            </>
+          )}
         </div>
 
         {/* CONTENT */}
