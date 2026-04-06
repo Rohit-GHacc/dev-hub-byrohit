@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, use } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { BASE_URL } from "../utils/constants";
 import api from "../utils/api";
@@ -27,24 +27,24 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
 
   const location = useLocation();
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const fileInputRef = useRef();
 
   useEffect(() => {
-  if (location.state?.croppedImage) {
-    const file = location.state.croppedImage;
-    const index = location.state.index;
-    const filesFromState = location.state.files;
+    if (location.state?.croppedImage) {
+      const file = location.state.croppedImage;
+      const index = location.state.index;
+      const filesFromState = location.state.files;
 
-    if (!filesFromState || filesFromState.length === 0) return;
+      if (!filesFromState) return;
 
-    const updated = [...filesFromState];
-
-    if (index >= 0 && index < updated.length) {
+      const updated = [...filesFromState];
       updated[index] = file;
+      setFiles(updated);
+      // navigate('/app/profile',{ replace: true})
     }
+  }, [location.state]);
 
-    setFiles(updated);
-  }
-}, [location.state]);
   useEffect(() => {
     if (!user) return;
     setForm({
@@ -58,63 +58,118 @@ const Profile = () => {
     });
   }, [user]);
   useEffect(() => {
-    if (files.length > 6) {
-      toast.error("You cannot select more than 6 images");
-      setFiles([]);
+    if (user?.images && files.length === 0 && !location.state?.croppedImage) {
+      setFiles([...user.images]);
     }
-  }, [files]);
+  }, [user]);
   const handleChange = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
+  // const updateProfile = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const res = await api.patch(BASE_URL + "/profile/edit", form, {
+  //       withCredentials: true,
+  //     });
+
+  //     dispatch(addUser(res.data));
+  //     toast.success("Profile updated successfully 🎉");
+  //   } catch (err) {
+  //     toast.error("Update failed");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  // console.log("FILES: ", files)
   const updateProfile = async () => {
     try {
       setLoading(true);
-      const res = await api.patch(BASE_URL + "/profile/edit", form, {
+
+      const formData = new FormData();
+
+      const existingImageUrls = files.filter((file) => typeof file === "string");
+      formData.append("existingImages", JSON.stringify(existingImageUrls));
+
+      // append only new files
+      files.forEach((file) => {
+        if (file instanceof File) {
+          formData.append("images", file);
+        }
+      });
+
+      formData.append("firstName", form.firstName);
+      formData.append("lastName", form.lastName);
+      formData.append("age", form.age);
+      formData.append("gender", form.gender);
+      formData.append("about", form.about);
+      formData.append("skills", form.skills);
+
+      const res = await api.patch(BASE_URL + "/profile/edit", formData, {
         withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       dispatch(addUser(res.data));
-      toast.success("Profile updated successfully 🎉");
-    } catch (err) {
+      setFiles(res.data.images);
+      toast.success("Profile updated 🎉");
+    } catch {
       toast.error("Update failed");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleUpload = async () => {
-    if (Array.isArray(files) && files.length === 0) return;
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-    const formData = new FormData();
-    // formData.append("image", fileToUpload);
-    files.map((file) => {
-      formData.append("images", file);
+    setFiles((prev) => {
+      const updated = [...prev];
+      updated[selectedIndex] = file;
+      return updated;
     });
-    // formData.append('images',files)
 
-    try {
-      const res = await api.post(BASE_URL + "/profile/upload", formData, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      // setFiles(res.data.images)
-      handleChange("images", res.data.images);
-      toast.success("Image uploaded 📸");
-    } catch {
-      toast.error("Upload failed");
-    }
+    setSelectedIndex(null);
   };
-
   if (!user)
     return (
       <div className="text-center mt-10 bg-linear-to-br from-blue-50 to-gray-100">
         Loading...
       </div>
     );
-  console.log("files: ", files, "isArray: ", Array.isArray(files));
+  // console.log("files: ", files, "isArray: ", Array.isArray(files));
+  console.log("FILES:", files);
+  console.log("USER IMAGES:", user?.images);
+  const handleSlotClick = (index) => {
+    const file = files[index];
+
+    if (file) {
+      // edit existing or new
+      navigate("/app/crop", {
+        state: {
+          file,
+          index,
+          files,
+        },
+      });
+    } else {
+      // empty slot → add image
+      setSelectedIndex(index);
+      fileInputRef.current.click();
+    }
+  };
+
+
+  const handleDelete = (index) => {
+    setFiles((prevFiles) => {
+      const updated = [...prevFiles];
+      updated[index] = null;
+      return updated;
+    });
+  };
   return (
     <div className="min-h-[90vh] bg-linear-to-br from-blue-50 to-gray-100 px-4 py-10">
       <MotionBg />
@@ -257,58 +312,61 @@ const Profile = () => {
               Profile Image
             </label>
 
-            <div className="flex items-center gap-4 flex-wrap">
-              <label className="cursor-pointer bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-black transition text-sm">
-                Add Image
-                <input
-                  type="file"
-                  className="hidden"
-                  multiple
-                  onChange={(e) => setFiles(Array.from(e.target.files))}
-                />
-              </label>
-
-              <span className="text-sm text-gray-500 truncate max-w-37.5">
-                {files[0] ? files[0].name : "No file selected"}
-              </span>
-              <button
-                onClick={() => {
-                  if (!files.length) return;
-                  navigate("/app/crop", {
-                    state: { file: files[0], index: 0, files: files },
-                  });
-                }}
-                className="bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 transition text-sm rounded-lg cursor-pointer"
-              >
-                Edit Image
-              </button>
-              <button
-                onClick={handleUpload}
-                className="bg-blue-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm"
-              >
-                Upload
-              </button>
-            </div>
-
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              onChange={handleImageUpload}
+            />
             {/* Preview */}
-            {
-            Array.isArray(files) && files.length > 0 && (
-              <div className="flex gap-2">
-                {files.map((file, i) => (
-                  <img
+            <div className="flex gap-2 mt-4 flex-wrap">
+              {Array.from({ length: 6 }).map((_, i) => {
+                const file = files[i];
+
+                {
+                  /* <div className = 'ml-17 mb-13 absolute h-4 w-4 bg-red-500 hover:bg-red-700 rounded-full'> 
+                  </div> */
+                }
+                return (
+                  <div
                     key={i}
-                    src={URL.createObjectURL(file)}
-                    alt="preview"
-                    className="mt-3 w-20 h-20 rounded-full object-cover border"
-                    onClick={() =>
-                      navigate("/app/crop", {
-                        state: { file: files[i], index: i, files: files },
-                      })
-                    }
-                  />
-                ))}
-              </div>
-            )}
+                    className="relative w-19 h-19 rounded-full border-2 border-gray-300 cursor-pointer flex items-center justify-center bg-gray-100 hover:scale-105 transition"
+                  >
+                    {/* IMAGE */}
+                    <div
+                      onClick={() => handleSlotClick(i)}
+                      className="w-full h-full overflow-hidden rounded-full flex items-center justify-center"
+                    >
+                      {file ? (
+                        <img
+                          src={
+                            file instanceof File
+                              ? URL.createObjectURL(file)
+                              : file
+                          }
+                          className="w-full h-full object-cover "
+                        />
+                      ) : (
+                        <span className="text-gray-400 text-2xl flex justify-center items-center">+</span>
+                      )}
+                    </div>
+
+                    {/* DELETE BUTTON */}
+                    {file && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation(); // 🔥 prevent slot click
+                          handleDelete(i);
+                        }}
+                        className="absolute -top-1 -right-1 z-10 bg-black/60 text-white text-xs rounded-full w-5 h-5 flex pb-0.5 items-center justify-center hover:bg-red-500 cursor-pointer"
+                      >
+                        x
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {/* Save Button */}

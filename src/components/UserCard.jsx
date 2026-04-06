@@ -72,7 +72,7 @@ const UserCard = ({ user, isFeed = false }) => {
         <div className="relative w-full h-[60%] overflow-hidden rounded-t-2xl">
           {/* Image */}
           <img
-            src={images[currentIndex]}
+            src={images.length ? images[currentIndex] : 'https://cdn.vectorstock.com/i/500p/29/52/faceless-male-avatar-in-hoodie-vector-56412952.jpg'}
             alt="user"
             className="w-full h-full object-cover transition duration-300"
           />

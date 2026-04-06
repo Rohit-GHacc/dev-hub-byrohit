@@ -15,9 +15,21 @@ const Crop = () => {
 
   // ✅ FIX: set image AFTER file is available
   useEffect(() => {
-    if (file) {
+    if (!file) return;
+
+    // if it's already a URL (string)
+    if (typeof file === "string") {
+      setImageSrc(file);
+      return;
+    }
+
+    // if it's a File/Blob
+    if (file instanceof File || file instanceof Blob) {
       const url = URL.createObjectURL(file);
       setImageSrc(url);
+
+      // 🔥 cleanup (important)
+      return () => URL.revokeObjectURL(url);
     }
   }, [file]);
 
@@ -29,6 +41,7 @@ const Crop = () => {
     if (!croppedAreaPixels || !imageSrc) return;
 
     const image = new Image();
+    image.crossOrigin = "anonymous";
     image.src = imageSrc;
 
     await new Promise((resolve) => {
@@ -73,7 +86,7 @@ const Crop = () => {
     });
 
     navigate("/app/profile", {
-      state: { croppedImage: file,index, files: state.files},
+      state: { croppedImage: file, index, files: state.files },
     });
   };
 

@@ -69,7 +69,7 @@ const NavBar = () => {
 
           {/* Avatar */}
           <img
-            src={user.images[0]}
+            src={user.images.length ? user.images[0] : 'https://cdn.vectorstock.com/i/500p/29/52/faceless-male-avatar-in-hoodie-vector-56412952.jpg'}
             className="w-10 h-10 rounded-full border-2 border-gray-200 cursor-pointer"
             onClick={() => setOpen((prev) => !prev)}
           />
