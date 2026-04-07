@@ -13,6 +13,8 @@ const Profile = () => {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
   const navigate = useNavigate();
+  const MAX_SKILLS = 10;
+  const MAX_PROJECTS = 6;
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -21,10 +23,15 @@ const Profile = () => {
     about: "",
     skills: "",
     images: "",
+    projects: "",
   });
 
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [skillsList, setSkillsList] = useState([]);
+  const [skillInput, setSkillInput] = useState("");
+  const [projectsList, setProjectsList] = useState([]);
+  const [projectInput, setProjectInput] = useState("");
 
   const location = useLocation();
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -47,16 +54,45 @@ const Profile = () => {
 
   useEffect(() => {
     if (!user) return;
+    const initialSkills = Array.isArray(user.skills)
+      ? user.skills
+      : typeof user.skills === "string"
+        ? user.skills
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : [];
+
+    const initialProjects = Array.isArray(user.projects)
+      ? user.projects
+      : typeof user.projects === "string"
+        ? user.projects
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean)
+        : [];
+
+    setSkillsList(initialSkills.slice(0, MAX_SKILLS));
+    setProjectsList(initialProjects.slice(0, MAX_PROJECTS));
     setForm({
       firstName: user.firstName || "",
       lastName: user.lastName || "",
       gender: user.gender || "",
       age: user.age || "",
       about: user.about || "",
-      skills: user.skills || "",
+      skills: initialSkills.slice(0, MAX_SKILLS),
       images: user.images || "",
+      projects: initialProjects.slice(0, MAX_PROJECTS),
     });
   }, [user]);
+
+  useEffect(() => {
+    setForm((prev) => ({ ...prev, skills: skillsList }));
+  }, [skillsList]);
+
+  useEffect(() => {
+    setForm((prev) => ({ ...prev, projects: projectsList }));
+  }, [projectsList]);
   useEffect(() => {
     if (user?.images && files.length === 0 && !location.state?.croppedImage) {
       setFiles([...user.images]);
@@ -103,7 +139,8 @@ const Profile = () => {
       formData.append("age", form.age);
       formData.append("gender", form.gender);
       formData.append("about", form.about);
-      formData.append("skills", form.skills);
+      formData.append("skills", JSON.stringify(skillsList));
+      formData.append("projects", JSON.stringify(projectsList));
 
       const res = await api.patch(BASE_URL + "/profile/edit", formData, {
         withCredentials: true,
@@ -133,6 +170,87 @@ const Profile = () => {
     });
 
     setSelectedIndex(null);
+  };
+
+  const handleAddSkill = () => {
+    const raw = skillInput.trim();
+    if (!raw) return;
+
+    const candidates = raw
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    if (candidates.length === 0) return;
+
+    setSkillsList((prev) => {
+      if (prev.length >= MAX_SKILLS) return prev;
+
+      const nextList = [...prev];
+
+      for (const candidate of candidates) {
+        if (nextList.length >= MAX_SKILLS) break;
+        const exists = nextList.some(
+          (s) => s.toLowerCase() === candidate.toLowerCase(),
+        );
+        if (exists) continue;
+        nextList.push(candidate);
+      }
+
+      return nextList;
+    });
+
+    setSkillInput("");
+  };
+
+  const handleRemoveSkill = (skill) => {
+    setSkillsList((prev) => prev.filter((s) => s !== skill));
+  };
+
+  const handleAddProject = () => {
+    const raw = projectInput.trim();
+    if (!raw) return;
+
+    const candidates = raw
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    if (candidates.length === 0) return;
+
+    setProjectsList((prev) => {
+      if (prev.length >= MAX_PROJECTS) return prev;
+
+      const nextList = [...prev];
+
+      for (const candidate of candidates) {
+        if (nextList.length >= MAX_PROJECTS) break;
+        let normalized = candidate;
+        if (!/^https?:\/\//i.test(normalized)) {
+          normalized = `https://${normalized}`;
+        }
+
+        try {
+          new URL(normalized);
+        } catch {
+          continue;
+        }
+
+        const exists = nextList.some(
+          (u) => u.toLowerCase() === normalized.toLowerCase(),
+        );
+        if (exists) continue;
+        nextList.push(normalized);
+      }
+
+      return nextList;
+    });
+
+    setProjectInput("");
+  };
+
+  const handleRemoveProject = (url) => {
+    setProjectsList((prev) => prev.filter((p) => p !== url));
   };
   if (!user)
     return (
@@ -286,24 +404,128 @@ const Profile = () => {
           </div>
 
           {/* Skills */}
-          <div className="relative mt-4">
-            <textarea
-              value={form.skills}
-              onChange={(e) => handleChange("skills", e.target.value)}
-              className="peer w-full border border-gray-300 rounded-lg px-3 pt-5 pb-2 min-h-15 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder=" "
-            />
-            <label
-              className="absolute left-3 top-2 text-xs text-gray-500 transition-all 
-          peer-placeholder-shown:top-3 
-          peer-placeholder-shown:text-sm 
-          peer-placeholder-shown:text-gray-400 
-          peer-focus:top-2 
-          peer-focus:text-xs 
-          peer-focus:text-blue-500"
-            >
-              Skills (comma separated)
-            </label>
+          <div className="mt-4">
+            <label className="text-sm text-gray-600 mb-2 block">Skills</label>
+
+            {skillsList.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-3">
+                {skillsList.map((skill) => (
+                  <span
+                    key={skill}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100 text-sm"
+                  >
+                    <span className="max-w-55 truncate">{skill}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveSkill(skill)}
+                      className="h-5 w-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center hover:bg-blue-200 transition"
+                      aria-label={`Remove ${skill}`}
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={skillInput}
+                onChange={(e) => setSkillInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddSkill();
+                  }
+                }}
+                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder={
+                  skillsList.length >= MAX_SKILLS
+                    ? `Maximum ${MAX_SKILLS} skills added`
+                    : "Add a skill"
+                }
+                disabled={skillsList.length >= MAX_SKILLS}
+              />
+              <button
+                type="button"
+                onClick={handleAddSkill}
+                disabled={skillsList.length >= MAX_SKILLS}
+                className="px-4 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                title="Add skill"
+              >
+                +
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              {skillsList.length}/{MAX_SKILLS} skills
+            </p>
+          </div>
+
+          <div className="mt-5">
+            <label className="text-sm text-gray-600 mb-2 block">Projects</label>
+
+            {projectsList.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-3">
+                {projectsList.map((url) => (
+                  <span
+                    key={url}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gray-50 text-gray-700 border border-gray-200 text-sm"
+                  >
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="max-w-60 truncate hover:underline"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {url}
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveProject(url)}
+                      className="h-5 w-5 rounded-full bg-gray-200 text-gray-700 flex items-center justify-center hover:bg-gray-300 transition"
+                      aria-label={`Remove ${url}`}
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={projectInput}
+                onChange={(e) => setProjectInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddProject();
+                  }
+                }}
+                className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder={
+                  projectsList.length >= MAX_PROJECTS
+                    ? `Maximum ${MAX_PROJECTS} projects added`
+                    : "Add deployed project link"
+                }
+                disabled={projectsList.length >= MAX_PROJECTS}
+              />
+              <button
+                type="button"
+                onClick={handleAddProject}
+                disabled={projectsList.length >= MAX_PROJECTS}
+                className="px-4 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                title="Add project"
+              >
+                +
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              {projectsList.length}/{MAX_PROJECTS} projects
+            </p>
           </div>
 
           {/* Upload */}
@@ -372,7 +594,7 @@ const Profile = () => {
           {/* Save Button */}
           <button
             onClick={updateProfile}
-            className="w-full mt-6 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium"
+            className="w-full mt-6 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition font-medium cursor-pointer"
           >
             Save Changes
           </button>

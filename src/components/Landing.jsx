@@ -111,7 +111,7 @@ const Landing = () => {
             transition={{ duration: 1.2, ease: "easeOut" }}
             viewport={{ once: true }}
             src="https://blogs.opentext.com/wp-content/uploads/2022/08/shutterstock_2128117100-1200x675-1-1024x576.jpg"
-            className="rounded-2xl shadow-lg"
+            className="rounded-2xl shadow-lg hover:scale-105 transition"
           />
 
           <motion.div
@@ -162,7 +162,7 @@ const Landing = () => {
             transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
             viewport={{ once: true }}
             src="https://img.freepik.com/premium-photo/software-developer-talking-people-remote-videoconference-with-webcam-attending-online-videocall-meeting-internet-chatting-about-code-programming-teleconference-office_482257-55301.jpg"
-            className="rounded-2xl shadow-lg w-full object-cover"
+            className="rounded-2xl shadow-lg w-full object-cover hover:scale-105 transition"
           />
         </section>
         <section className="bg-linear-to-b from-blue-50  to-white py-16 md:py-16 px-4">
@@ -173,7 +173,7 @@ const Landing = () => {
               transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
               viewport={{ once: true }}
               src="https://images.unsplash.com/photo-1551288049-bebda4e38f71"
-              className="rounded-2xl shadow-lg"
+              className="rounded-2xl shadow-lg hover:scale-105 transition"
             />
             <motion.div
             initial={{ opacity: 0, x: 80 }}
@@ -201,7 +201,7 @@ const Landing = () => {
           </p>
 
           {/* Card */}
-          <div className="mt-12 max-w-md mx-auto bg-white border rounded-2xl p-8 shadow-md hover:shadow-lg transition">
+          <div className="mt-12 max-w-md mx-auto bg-white border rounded-2xl p-8 shadow-md hover:shadow-lg transition hover:scale-105">
             <h3 className="text-xl font-semibold mb-4">Premium Membership</h3>
 
             {/* Price */}
@@ -293,7 +293,7 @@ const Landing = () => {
             "Best platform to connect with devs",
             "Way better than random networking",
           ].map((text, i) => (
-            <div key={i} className=" p-6 rounded-2xl shadow-sm bg-white">
+            <div key={i} className=" p-6 rounded-2xl shadow-sm bg-white hover:scale-105 transition">
               <p className="text-gray-600">“{text}”</p>
             </div>
           ))}

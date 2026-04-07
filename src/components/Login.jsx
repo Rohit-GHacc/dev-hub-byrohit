@@ -3,7 +3,6 @@ import api from "../utils/api";
 import { useDispatch } from "react-redux";
 import { addUser } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
-import { BASE_URL } from "../utils/constants";
 import { motion } from "framer-motion";
 
 const Login = () => {
@@ -77,7 +76,7 @@ const Login = () => {
       />
 
       <motion.div
-        className="absolute w-[400px] h-[400px] bg-indigo-200 rounded-full blur-[120px] opacity-30 z-0"
+        className="absolute w-100 h-100 bg-indigo-200 rounded-full blur-[120px] opacity-30 z-0"
         animate={{ scale: [1, 1.2, 1] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
