@@ -53,7 +53,7 @@ const Requests = () => {
       <div className="flex flex-col items-center justify-center min-h-[80vh] text-center bg-linear-to-br from-blue-50 to-gray-100">
          <MotionBg/>
 
-        <div className="z-100 bg-white rounded-2xl shadow-md p-8 w-[40%]">
+        <div className="z-100 bg-white rounded-2xl shadow-md p-8 w-[80%] md:w-[40%]">
         <h2 className="text-2xl font-semibold text-gray-700">
           No pending requests
         </h2>

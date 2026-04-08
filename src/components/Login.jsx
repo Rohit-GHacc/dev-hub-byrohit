@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../store/userSlice";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
+import toast from 'react-hot-toast'
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,6 +31,7 @@ const Login = () => {
         localStorage.setItem('token',res.data.token)
         dispatch(addUser(res.data.user));
         navigate("/app/feed");
+        toast.success("Welcome Back 👋");
       } else {
         const res = await api.post(
           `/createUser`,
@@ -38,11 +39,19 @@ const Login = () => {
           { withCredentials: true },
         );
 
+        localStorage.setItem('token',res.data.token)
         dispatch(addUser(res.data.user));
         navigate("/app/profile");
+
+        toast.success("Account Created Successfully. Welcome to DevHub 👋");
       }
     } catch (err) {
-      setError(err?.response?.data || "Something went wrong");
+      console.error("Auth error:", err);
+      const message =
+        err?.response?.data ||
+        err?.message ||
+        "Network error. Please check your backend URL/CORS.";
+      setError(message);
     }
   };
 

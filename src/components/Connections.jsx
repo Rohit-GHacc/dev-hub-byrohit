@@ -24,12 +24,14 @@ const Connections = () => {
 
   if (!connections || connections.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[70vh] text-center bg-linear-to-br from-blue-50 to-gray-100">
+      <div className="flex flex-col items-center justify-center h-[70vh] text-center bg-linear-to-br from-blue-50 to-gray-100 min-h-[80vh]">
         <MotionBg />
+        <div className = 'z-100 bg-white rounded-2xl shadow-md p-8 md:w-[40%] w-[80%]'>
         <h2 className="text-2xl font-semibold text-gray-700">
           No connections yet
         </h2>
         <p className="text-gray-500 mt-2">Start connecting with people 🚀</p>
+        </div>
       </div>
     );
   }

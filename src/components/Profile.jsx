@@ -168,7 +168,7 @@ const Profile = () => {
       updated[selectedIndex] = file;
       return updated;
     });
-
+    // setForm(prev => ({...prev, images: files}))
     setSelectedIndex(null);
   };
 
