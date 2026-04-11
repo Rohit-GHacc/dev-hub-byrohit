@@ -2,9 +2,12 @@ import api from "../utils/api";
 import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../utils/constants";
 import MotionBg from "./MotionBg";
+import { useDispatch } from "react-redux";
+import { addUser } from "../store/userSlice";
 
 const Premium = () => {
   const [isUserPremium, setIsUserPremium] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     verifyPremiumUser();
@@ -16,6 +19,33 @@ const Premium = () => {
     });
     if (response.data.isPremium) {
       setIsUserPremium(true);
+      return true;
+    }
+    return false;
+  };
+
+  const refreshUser = async () => {
+    const res = await api.get(BASE_URL + "/profile/view", {
+      withCredentials: true,
+    });
+    dispatch(addUser(res.data));
+  };
+
+  const waitForPremiumAndRefresh = async () => {
+    // Payment status is updated via Razorpay webhook, which can take a few seconds.
+    // Poll verify endpoint briefly, then refresh redux user so navbar updates.
+    const attempts = 8;
+    for (let i = 0; i < attempts; i++) {
+      try {
+        const ok = await verifyPremiumUser();
+        if (ok) {
+          await refreshUser();
+          return;
+        }
+      } catch (e) {
+        // ignore transient errors during polling
+      }
+      await new Promise((r) => setTimeout(r, 1500));
     }
   };
 
@@ -45,9 +75,7 @@ const Premium = () => {
           color: "#2563eb",
         },
         handler: async function () {
-          setTimeout(() => {
-            verifyPremiumUser();
-          }, 3000);
+          await waitForPremiumAndRefresh();
         },
       };
 
