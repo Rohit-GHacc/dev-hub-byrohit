@@ -149,10 +149,10 @@ const UserCard = ({ user, isFeed = false }) => {
         whileHover={{ scale: 1.02 }}
         whileDrag={isFeed ? { scale: 1.05 } : {}}
         transition={{ duration: 0.3 }}
-        className="w-full max-w-[420px] bg-white/90 backdrop-blur border border-gray-200 rounded-3xl shadow-xl overflow-hidden flex flex-col"
+        className="w-full max-w-105 bg-white/90 backdrop-blur border border-gray-200 rounded-3xl shadow-xl overflow-hidden flex flex-col"
       >
         {/* IMAGE */}
-        <div className="relative w-full aspect-[4/5] overflow-hidden">
+        <div className="relative w-full aspect-4/5 overflow-hidden">
           <img
             src={images.length ? images[currentIndex] : DEFAULT_AVATAR}
             alt="user"
@@ -287,7 +287,7 @@ const UserCard = ({ user, isFeed = false }) => {
                       onClick={(e) => e.stopPropagation()}
                     >
                       <Icon className="text-gray-700" />
-                      <span className="max-w-[140px] truncate">
+                      <span className="max-w-35 truncate">
                         {meta.label}
                       </span>
                     </a>
@@ -302,14 +302,14 @@ const UserCard = ({ user, isFeed = false }) => {
             <div className="mt-auto pt-4 flex gap-3">
               <button
                 onClick={() => handleStatus("ignored", user?._id)}
-                className="w-1/2 border border-gray-200 text-gray-700 py-2.5 rounded-xl hover:bg-gray-50 transition font-medium"
+                className="w-1/2 border border-gray-200 text-gray-700 py-2.5 rounded-xl hover:bg-gray-50 transition font-medium cursor-pointer"
               >
                 Ignore
               </button>
 
               <button
                 onClick={() => handleStatus("interested", user?._id)}
-                className="w-1/2 bg-linear-to-r from-blue-600 to-indigo-600 text-white py-2.5 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition font-semibold shadow"
+                className="w-1/2 bg-linear-to-r from-blue-600 to-indigo-600 text-white py-2.5 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition font-semibold shadow cursor-pointer"
               >
                 Interested
               </button>

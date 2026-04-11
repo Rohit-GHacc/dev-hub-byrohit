@@ -54,7 +54,7 @@ const Connections = () => {
               {/* Left Section */}
               <div className="flex items-center gap-4 flex-1">
                 {/* Avatar */}
-                <div className="w-14 h-14 rounded-full overflow-hidden border">
+                <div className="w-[25%] h-full rounded-full overflow-hidden border">
                   <img
                     src={c.images[0]}
                     alt={c.firstName}
